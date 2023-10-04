@@ -1,6 +1,7 @@
 package com.mercadolivro.controllers
 
 import com.mercadolivro.models.Customer
+import com.mercadolivro.requests.PostCustomerRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -17,7 +18,7 @@ class CurstomerController {
     }
 
     @PostMapping
-    fun create(@RequestBody customer: Customer) {
+    fun create(@RequestBody customer: PostCustomerRequest) {
         println(customer)
     }
 
