@@ -21,7 +21,7 @@ class CurstomerController {
     val customers = mutableListOf<Customer>()
 
     @GetMapping
-    fun getCustomer(@RequestParam name: String?): List<Customer> {
+    fun getCustomers(@RequestParam name: String?): List<Customer> {
         name?.let {
             return customers.filter { it.name.contains(name, true) }
         }
