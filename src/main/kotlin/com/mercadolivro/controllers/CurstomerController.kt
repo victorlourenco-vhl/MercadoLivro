@@ -2,6 +2,7 @@ package com.mercadolivro.controllers
 
 import com.mercadolivro.models.Customer
 import com.mercadolivro.requests.PostCustomerRequest
+import com.mercadolivro.services.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,45 +17,36 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("customers")
-class CurstomerController {
-    var id: Int = 0
-    val customers = mutableListOf<Customer>()
+class CurstomerController(
+    val customerService: CustomerService
+) {
 
     @GetMapping
     fun getCustomers(@RequestParam name: String?): List<Customer> {
-        name?.let {
-            return customers.filter { it.name.contains(name, true) }
-        }
-        return customers
+        return customerService.getCustomers(name)
     }
 
     @GetMapping("{id}")
     fun getCustomerById(@PathVariable id: Int): Customer? {
-        return customers.find { x -> x.id == id }
+        return customerService.getCustomerById(id)
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody customer: PostCustomerRequest): Customer {
-        id += 1
-        val newCustomer = Customer(id, customer.name, customer.email)
-        customers.add(newCustomer)
-        return newCustomer
+        return customerService.create(customer)
     }
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Int, @RequestBody customer: Customer) {
-        customers.find { it.id == id }.let {
-            it?.name = customer.name
-            it?.email = customer.email
-        }
+        customerService.update(id, customer)
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteById(@PathVariable id: Int) {
-        customers.removeIf { it.id == id }
+        customerService.deleteById(id)
     }
 
 }
