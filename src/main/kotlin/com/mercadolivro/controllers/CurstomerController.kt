@@ -2,11 +2,11 @@ package com.mercadolivro.controllers
 
 import com.mercadolivro.models.Customer
 import com.mercadolivro.requests.PostCustomerRequest
-import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -23,7 +23,7 @@ class CurstomerController {
         return customers
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     fun getCustomerById(@PathVariable id: Int): Customer? {
         return customers.find { x -> x.id == id }
     }
@@ -35,6 +35,15 @@ class CurstomerController {
         val newCustomer = Customer(id, customer.name, customer.email)
         customers.add(newCustomer)
         return newCustomer
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun update(@PathVariable id: Int, @RequestBody customer: Customer) {
+        customers.find { it.id == id }.let {
+            it?.name =  customer.name
+            it?.email =  customer.email
+        }
     }
 
 }
