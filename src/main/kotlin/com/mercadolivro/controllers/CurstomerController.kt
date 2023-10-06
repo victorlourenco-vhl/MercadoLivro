@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -20,7 +21,10 @@ class CurstomerController {
     val customers = mutableListOf<Customer>()
 
     @GetMapping
-    fun getCustomer(): List<Customer> {
+    fun getCustomer(@RequestParam name: String?): List<Customer> {
+        name?.let {
+            return customers.filter { it.name.contains(name, true) }
+        }
         return customers
     }
 
@@ -42,8 +46,8 @@ class CurstomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Int, @RequestBody customer: Customer) {
         customers.find { it.id == id }.let {
-            it?.name =  customer.name
-            it?.email =  customer.email
+            it?.name = customer.name
+            it?.email = customer.email
         }
     }
 
