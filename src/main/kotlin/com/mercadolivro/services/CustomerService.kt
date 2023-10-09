@@ -24,15 +24,15 @@ class CustomerService {
         return customers.find { x -> x.id == id }
     }
 
-    fun create(customer: PostCustomerRequest): Customer {
+    fun create(customer: Customer): Customer {
         id += 1
         val newCustomer = Customer(id, customer.name, customer.email)
         customers.add(newCustomer)
         return newCustomer
     }
 
-    fun update(id: Int, customer: Customer) {
-        customers.find { it.id == id }.let {
+    fun update(customer: Customer) {
+        customers.find { it.id == customer.id }.let {
             it?.name = customer.name
             it?.email = customer.email
         }

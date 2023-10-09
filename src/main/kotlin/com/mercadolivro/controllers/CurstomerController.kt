@@ -1,7 +1,9 @@
 package com.mercadolivro.controllers
 
+import com.mercadolivro.externsions.toCustomer
 import com.mercadolivro.models.Customer
 import com.mercadolivro.requests.PostCustomerRequest
+import com.mercadolivro.requests.PutCustomerRequest
 import com.mercadolivro.services.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -33,14 +35,15 @@ class CurstomerController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody customer: PostCustomerRequest): Customer {
-        return customerService.create(customer)
+    fun create(@RequestBody postCustomer: PostCustomerRequest): Customer {
+        return customerService.create(postCustomer.toCustomer())
     }
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody customer: Customer) {
-        customerService.update(id, customer)
+    fun update(@PathVariable id: Int, @RequestBody putCustomer: PutCustomerRequest) {
+
+        customerService.update(putCustomer.toCustomer(id))
     }
 
     @DeleteMapping("{id}")
