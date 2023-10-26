@@ -25,12 +25,12 @@ class CurstomerController(
 
     @GetMapping
     fun getCustomers(@RequestParam name: String?): List<Customer> {
-        return customerService.getCustomers(name)
+        return customerService.findByName(name)
     }
 
     @GetMapping("{id}")
     fun getCustomerById(@PathVariable id: Int): Customer? {
-        return customerService.getCustomerById(id)
+        return customerService.findById(id)
     }
 
     @PostMapping

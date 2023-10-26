@@ -1,45 +1,38 @@
 package com.mercadolivro.services
 
 import com.mercadolivro.models.Customer
-import com.mercadolivro.requests.PostCustomerRequest
+import com.mercadolivro.repositories.CustomerRepository
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
 
 @Service
-class CustomerService {
+class CustomerService(
+    val customerRepository: CustomerRepository
+) {
+    fun findByName(name: String?): List<Customer> {
+        var customers: ArrayList<Customer>
 
-    val customers = mutableListOf<Customer>()
-
-    var id: Int = 0
-
-    fun getCustomers(name: String?): List<Customer> {
         name?.let {
-            return customers.filter { it.name.contains(name, true) }
+            customers = customerRepository.findByNameContainingIgnoreCase(name)
+            return customers
         }
-        return customers
+        return customerRepository.findAll()
+
     }
 
-    fun getCustomerById(id: Int): Customer? {
-        return customers.find { x -> x.id == id }
+    fun findById(id: Int): Customer? {
+        return customerRepository.findById(id).orElseThrow()
     }
 
     fun create(customer: Customer): Customer {
-        id += 1
-        val newCustomer = Customer(id, customer.name, customer.email)
-        customers.add(newCustomer)
-        return newCustomer
+        return customerRepository.save(customer)
     }
 
     fun update(customer: Customer) {
-        customers.find { it.id == customer.id }.let {
-            it?.name = customer.name
-            it?.email = customer.email
-        }
+        customerRepository.save(customer)
     }
 
     fun deleteById(id: Int) {
-        customers.removeIf { it.id == id }
+        customerRepository.deleteById(id)
     }
 
 }
